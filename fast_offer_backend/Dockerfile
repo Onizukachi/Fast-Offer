@@ -13,12 +13,17 @@ RUN apt-get update -qq && \
   apt-get install --no-install-recommends -y build-essential git libpq-dev bash bash-completion libvips pkg-config curl gnupg2 postgresql-client nano && \
   apt-get clean
 
-  # Install gems
+# Copying Gemfile and Gemfile.lock
 COPY Gemfile Gemfile.lock ./
+
+# Install gems
 RUN bundle check || bundle install --jobs 20 --retry 5
 
 # Copy application code
 COPY . ./
+
+# Make file executable
+RUN chmod +x ./entrypoint.sh
 
 # Entrypoint prepares the database.
 ENTRYPOINT ["./entrypoint.sh"]

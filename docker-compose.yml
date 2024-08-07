@@ -1,22 +1,28 @@
 version: "3.8"
+
+x-backend:
+  &backend
+  build:
+    context: ./fast_offer_backend
+    dockerfile: Dockerfile
+  user: "${UID:-1000}:${GID:-1000}"
+  env_file:
+    - ".env"
+    - "./fast_offer_backend/.env.development"
+  stdin_open: true
+  tty: true
+  volumes:
+    - ./fast_offer_backend:/app
+
 services:
   api:
-    build:
-      context: ./fast_offer_backend
-      dockerfile: Dockerfile
-    user: "${UID:-1000}:${GID:-1000}"
-    stdin_open: true
-    tty: true
+    <<: *backend
+    ports:
+      - "3001:3001"
     depends_on:
       - postgres
       - redis
-    env_file:
-      - ".env"
-      - "./fast_offer_backend/.env.development"
-    ports:
-      - "3001:3001"
-    volumes:
-      - ./fast_offer_backend:/app
+
   frontend:
     build:
       context: ./fast_offer_front
@@ -30,6 +36,7 @@ services:
       - ./fast_offer_front:/app
     ports:
       - "3000:3000"
+
   postgres:
     image: postgres:16-alpine
     environment:
@@ -43,6 +50,7 @@ services:
       interval: 2s
       timeout: 5s
       retries: 30
+
   redis:
     image: redis:7-alpine
     volumes:
@@ -54,15 +62,12 @@ services:
       interval: 1s
       timeout: 3s
       retries: 30
-#  sidekiq:
-#    build:
-#      context: ./fast_offer_backend
-#    command: bundle exec sidekiq
-#    depends_on:
-#      - redis
-#      - api
-#    env_file:
-#      - ./fast_offer_backend/.env.development
+
+  sidekiq:
+    <<: *backend
+    command: bundle exec sidekiq
+    depends_on:
+      - api
 
 volumes:
   pg_data:
