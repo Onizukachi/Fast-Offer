@@ -5,7 +5,7 @@ module Api
     class FavoritesController < ApplicationController
       include CursorMetaParamsHandler
 
-      before_action :authenticate_user!, except: %i[index]
+      before_action :authenticate_user!
       after_action :verify_authorized
 
       # GET /api/v1/favorites

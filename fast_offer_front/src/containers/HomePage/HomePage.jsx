@@ -19,6 +19,8 @@ const HomePage = () => {
       positionsQuery(
       ).then((data) => {
         setPositions(deserialize(data).data)
+      }).catch((error) => {
+        console.log(error)
       }),
     { refetchInterval: false, refetchOnWindowFocus: false },
   );
