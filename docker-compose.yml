@@ -1,0 +1,47 @@
+version: "3.8"
+services:
+  frontend:
+    build:
+      context: ./fast_offer_front
+      dockerfile: Dockerfile
+    volumes:
+      - ./fast_offer_front:/app
+    ports:
+      - "3000:3000"
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - "5445:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready -U postgres
+      interval: 2s
+      timeout: 5s
+      retries: 30
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+    ports:
+      - "7963:6379"
+    healthcheck:
+      test: redis-cli ping
+      interval: 1s
+      timeout: 3s
+      retries: 30
+#  sidekiq:
+#    build:
+#      context: ./fast_offer_backend
+#    command: bundle exec sidekiq
+#    depends_on:
+#      - redis
+#    env_file:
+#      - .env.development
+
+volumes:
+  pg_data:
+  redis_data:
+  bundle:

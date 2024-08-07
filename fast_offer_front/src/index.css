@@ -1,0 +1,17 @@
+@import '@styles/tagsInput.css';
+@import '@styles/qlEditor.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.app {
+    padding: 40px;
+    text-align: center;
+    font-family: sans-serif;
+}
+
+.container {
+    margin: auto;
+    width: 50%;
+}

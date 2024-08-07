@@ -1,0 +1,33 @@
+.ql-editor img {
+    display: inline-block;
+}
+
+#entity pre.ql-syntax {
+    background-color: #23241f;
+    color: #f8f8f2;
+    overflow: visible;
+    box-sizing: border-box;
+    line-height: 1.42;
+    height: 100%;
+    outline: none;
+    overflow-y: auto;
+    padding: 12px 15px;
+    tab-size: 4;
+    -moz-tab-size: 4;
+    text-align: left;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-weight: normal;
+}
+
+@media (max-width: 800px) {
+    #entity pre.ql-syntax {
+        font-size: medium;
+    }
+}
+
+@media (max-width: 500px) {
+    #entity pre.ql-syntax {
+        font-size: small;
+    }
+}
