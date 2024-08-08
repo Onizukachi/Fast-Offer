@@ -9,12 +9,12 @@ default: &default
 
 development:
   <<: *default
-  database: <%= ENV['POSTGRES_DB'] %>
+  database: easy_offer_backend_development %>
 
 test:
   <<: *default
-  database: <%= ENV['POSTGRES_DB'] %>
+  database: easy_offer_backend_test %>
 
 production:
   <<: *default
-  database: <%= ENV['POSTGRES_DB'] %>
+  database: easy_offer_backend_production %>
