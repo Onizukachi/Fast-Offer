@@ -7,8 +7,7 @@ x-backend:
     dockerfile: Dockerfile
   user: "${UID:-1000}:${GID:-1000}"
   env_file:
-    - ".env"
-    - "./fast_offer_backend/.env.development"
+    - ".env.development"
   stdin_open: true
   tty: true
   volumes:
@@ -17,8 +16,8 @@ x-backend:
 services:
   api:
     <<: *backend
-    ports:
-      - "3001:3001"
+#    ports:
+#      - "3001:3001"
     depends_on:
       - postgres
       - redis
@@ -30,12 +29,12 @@ services:
     user: "${UID:-1000}:${GID:-1000}"
     depends_on:
       - api
-    env_file:
-      - ".env"
+#    env_file:
+#      - ".env.development"
     volumes:
       - ./fast_offer_front:/app
-    ports:
-      - "3000:3000"
+#    ports:
+#      - "3000:3000"
 
   postgres:
     image: postgres:16-alpine
@@ -67,6 +66,16 @@ services:
     <<: *backend
     command: bundle exec sidekiq
     depends_on:
+      - api
+
+  proxy:
+    image: nginx:1.23.3-alpine
+    volumes:
+      - ./proxy/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "3000:80"
+    depends_on:
+      - frontend
       - api
 
 volumes:
