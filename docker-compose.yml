@@ -62,11 +62,11 @@ services:
       timeout: 3s
       retries: 30
 
-  sidekiq:
-    <<: *backend
-    command: bundle exec sidekiq
-    depends_on:
-      - api
+#  sidekiq:
+#    <<: *backend
+#    command: bundle exec sidekiq
+#    depends_on:
+#      - api
 
   proxy:
     image: nginx:1.23.3-alpine
