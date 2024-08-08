@@ -16,6 +16,8 @@ x-backend:
     - ".env"
   stdin_open: true
   tty: true
+  volumes:
+    - ./fast_offer_backend:/app
 
 services:
   api:
