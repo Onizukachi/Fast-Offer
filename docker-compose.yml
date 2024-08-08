@@ -7,7 +7,7 @@ x-backend:
     dockerfile: Dockerfile
   user: "${UID:-1000}:${GID:-1000}"
   env_file:
-    - ".env.development"
+    - ".env"
   stdin_open: true
   tty: true
   volumes:
@@ -30,7 +30,7 @@ services:
     depends_on:
       - api
 #    env_file:
-#      - ".env.development"
+#      - ".env"
     volumes:
       - ./fast_offer_front:/app
 #    ports:
