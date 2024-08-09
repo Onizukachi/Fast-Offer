@@ -6,23 +6,23 @@
 
 
 ### Back-end
-- [Rails] (https://rubyonrails.org/)
+- [Rails](https://rubyonrails.org/)
 - [PostgreSQL](https://www.postgresql.org/)
 - [Redis](https://redis.io/)
 - [Sidekiq](https://github.com/mperham/sidekiq)
 
 ### Front-end
-- [React] (https://ru.legacy.reactjs.org/)
-- [Vite] (https://vitejs.dev/)
-- [TailwindCSS] (https://tailwindcss.com/)
-- [Redux] (https://redux.js.org/)
-- [NextUI] (https://nextui.org/)
-- [React-icons] (https://react-icons.github.io/react-icons/)
+- [React](https://ru.legacy.reactjs.org/)
+- [Vite](https://vitejs.dev/)
+- [TailwindCSS](https://tailwindcss.com/)
+- [Redux](https://redux.js.org/)
+- [NextUI](https://nextui.org/)
+- [React-icons](https://react-icons.github.io/react-icons/)
 
 ### DEVOPS
-- [Docker] (https://www.docker.com/)
-- [Docker compose] (https://www.docker.com/)
-- [Nginx] (https://nginx.org/ru/)
+- [Docker](https://www.docker.com/)
+- [Docker compose](https://www.docker.com/)
+- [Nginx](https://nginx.org/ru/)
 
 
 ## Running this app
