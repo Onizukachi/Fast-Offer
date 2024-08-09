@@ -16,6 +16,7 @@ x-backend:
     - ".env"
   stdin_open: true
   tty: true
+  # ЗДЕСЬ ПОЧЕМУТО БЕЗ ЭТОГО НЕ РАБОТАЕТ, РУГАЕТСЯ ЧТО НЕТ КРЕДОВ ДЛЯ DEVISE_GWT
   volumes:
     - ./fast_offer_backend:/app
 
