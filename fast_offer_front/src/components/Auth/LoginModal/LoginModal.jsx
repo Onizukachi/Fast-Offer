@@ -43,7 +43,7 @@ const LoginModal = ({ isOpen, onOpenChange, signUpOnOpen }) => {
 
   const loginUser = async () => {
     axios
-      .post(`${API_BACK_BASE_URL}/login`, {
+      .post(`${API_BACK_BASE_URL}/api/v1/login`, {
         user: {
           email: formData.email,
           password: formData.password,

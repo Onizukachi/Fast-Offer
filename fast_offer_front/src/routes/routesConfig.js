@@ -34,6 +34,7 @@ const routesConfig = [
   {
     path: '/favorites',
     element: FavoritesPage,
+    private: true
   },
 ]
 

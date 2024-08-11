@@ -10,6 +10,7 @@ module Api
 
       # GET /api/v1/favorites
       def index
+        p current_user
         authorize Favorite
         @page = current_user.favorite_questions.cursor_paginate(**cursor_meta_params).fetch
 

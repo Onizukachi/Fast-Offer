@@ -1,0 +1,21 @@
+FROM node:22.3-alpine
+
+# Add a work directory
+WORKDIR /app
+
+ENV NODE_ENV development
+
+# Cache and Install dependencies
+COPY package*.json .
+
+#RUN npm install
+RUN npm i
+
+# Copy app files
+COPY . .
+
+# Expose port
+EXPOSE 3000
+
+# start app
+CMD ["npm", "run", "dev"]

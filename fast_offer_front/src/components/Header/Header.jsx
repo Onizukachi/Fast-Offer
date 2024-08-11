@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useContext, useState} from "react";
 import Auth from "@components/Auth";
 import { NavLink, useLocation } from "react-router-dom";
 import {
@@ -14,12 +14,14 @@ import {
 import queryString from "query-string";
 import imgLogo from "./img/logo.svg";
 import { useSelector } from "react-redux";
+import AuthContext from "@context/AuthContext";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const storedPositionId = useSelector((state) => state.positionReducer);
   const currLocation = useLocation().pathname.split("/")[1];
   const menuItems = ["Вопросы", "Собесы", "Избранное"];
+  const { user } = useContext(AuthContext);
 
   const makeQuestionsPageLink = () => {
     if (!storedPositionId) return `/questions`;
@@ -96,14 +98,16 @@ const Header = () => {
             Собесы
           </Link>
         </NavbarItem>
-        <NavbarItem isActive={currLocation === "favorites"}>
-          <Link
-            color={currLocation === "favorites" ? "primary" : "foreground"}
-            href="/favorites"
-          >
-            Избранное
-          </Link>
-        </NavbarItem>
+        { user && (
+          <NavbarItem isActive={currLocation === "favorites"}>
+            <Link
+              color={currLocation === "favorites" ? "primary" : "foreground"}
+              href="/favorites"
+            >
+              Избранное
+            </Link>
+          </NavbarItem>
+        )}
       </NavbarContent>
 
       {/* Login and Register section */}

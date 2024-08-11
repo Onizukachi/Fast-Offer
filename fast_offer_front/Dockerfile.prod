@@ -1,0 +1,37 @@
+# Step 1: Build the application
+FROM node:22.3-alpine AS build
+
+ARG VITE_NODE_ENV
+ARG VITE_API_BASE_URL
+
+# Set env before build
+ENV VITE_NODE_ENV ${VITE_NODE_ENV}
+ENV VITE_API_BASE_URL ${VITE_API_BASE_URL}
+
+# Add a work directory
+WORKDIR /app
+
+# Cache and Install dependencies
+COPY package*.json .
+
+#RUN npm install
+RUN npm i
+
+# Copy app files
+COPY . .
+
+# Build project for production
+RUN ["npm", "run", "build"]
+
+# Step 2: Set up the production environment
+FROM nginx:1.27-alpine
+
+# copy nginx config
+COPY proxy/nginx.conf /etc/nginx/nginx.conf
+
+# copy static files
+COPY --from=build /app/dist /usr/share/nginx/html
+
+EXPOSE 80
+
+ENTRYPOINT ["nginx","-g","daemon off;"]

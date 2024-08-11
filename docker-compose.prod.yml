@@ -1,5 +1,3 @@
-version: "3.8"
-
 x-backend:
   &backend
   build:
@@ -12,17 +10,19 @@ x-backend:
     redis:
       condition: "service_started"
       required: true
+#  user: "${UID:-1000}:${GID:-1000}"
   env_file:
     - ".env"
+  environment:
+    - RAILS_ENV=production
   stdin_open: true
   tty: true
-  # ЗДЕСЬ ПОЧЕМУТО БЕЗ ЭТОГО НЕ РАБОТАЕТ, РУГАЕТСЯ ЧТО НЕТ КРЕДОВ ДЛЯ DEVISE_GWT
-  volumes:
-    - ./fast_offer_backend:/app
 
 services:
   api:
     <<: *backend
+    ports:
+      - "3001:3001"
 
   sidekiq:
     <<: *backend
@@ -32,17 +32,20 @@ services:
   frontend:
     build:
       context: ./fast_offer_front
-      dockerfile: Dockerfile
-    env_file:
-      - ".env"
+      dockerfile: Dockerfile.prod
+      args:
+        VITE_NODE_ENV: production
+        VITE_API_BASE_URL: "${VITE_API_BASE_URL}"
+    ports:
+      - "80:80"
+      - "443:443"
     depends_on:
       - api
 
   postgres:
     image: postgres:16-alpine
-    environment:
-      POSTGRES_USER: "${POSTGRES_USER}"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    env_file:
+      - .env
     ports:
       - "5445:5432"
     volumes:
@@ -57,21 +60,13 @@ services:
     image: redis:7-alpine
     volumes:
       - redis_data:/data
+    ports:
+      - "7963:6379"
     healthcheck:
       test: redis-cli ping
       interval: 1s
       timeout: 3s
       retries: 30
-
-  proxy:
-    image: nginx:1.23.3-alpine
-    volumes:
-      - ./proxy/nginx.conf:/etc/nginx/nginx.conf:ro
-    ports:
-      - "80:80"
-    depends_on:
-      - frontend
-      - api
 
 volumes:
   pg_data:

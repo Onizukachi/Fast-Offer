@@ -55,7 +55,7 @@ const SignUpModal = ({ isOpen, onOpenChange, loginModalOnOpen }) => {
 
   const signUpUser = async () => {
     axios
-      .post(`${API_BACK_BASE_URL}/signup`, {
+      .post(`${API_BACK_BASE_URL}/api/v1/signup`, {
         user: {
           email: formData.email,
           password: formData.password,

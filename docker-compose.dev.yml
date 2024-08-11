@@ -10,9 +10,10 @@ x-backend:
     redis:
       condition: "service_started"
       required: true
-  user: "${UID:-1000}:${GID:-1000}"
   env_file:
     - ".env"
+  environment:
+    - RAILS_ENV=development
   stdin_open: true
   tty: true
   volumes:
@@ -38,6 +39,8 @@ services:
       - "3000:3000"
     env_file:
       - ".env"
+    environment:
+      - VITE_NODE_ENV=development
     depends_on:
       - api
     volumes:
