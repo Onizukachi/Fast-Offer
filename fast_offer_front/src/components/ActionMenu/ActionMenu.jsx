@@ -5,7 +5,7 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from "@nextui-org/react";
-import { CiMenuKebab } from "react-icons/ci";
+import { IoMdSettings } from "react-icons/io";
 import { MdEdit } from "react-icons/md";
 import { FaRegTrashAlt } from "react-icons/fa";
 import PropTypes from "prop-types";
@@ -14,8 +14,8 @@ const ActionMenu = ({ onAction, showEdit= true, showDelete = true }) => {
   return (
     <Dropdown>
       <DropdownTrigger>
-        <Button variant="light" className="min-w-0 px-0">
-          <CiMenuKebab size="1.4em" className="cursor-pointer" />
+        <Button variant="light" className="min-w-0 px-2">
+          <IoMdSettings size="1.4em" className="cursor-pointer" />
         </Button>
       </DropdownTrigger>
       <DropdownMenu

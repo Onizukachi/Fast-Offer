@@ -62,7 +62,12 @@ const Question = ({ question, refetch, handleTagClick }) => {
     <div className="px-8 py-4 rounded-lg shadow-md">
       <div className="flex flex-wrap justify-between items-center">
         <span className="text-default-500">{formattedDate}</span>
-        <Positions positions={positions} />
+        <div className="flex gap-6">
+          <Positions positions={positions} />
+          {user && user.id === Number(author.id) && (
+            <ActionMenu onAction={handleQuestionAction} />
+          )}
+        </div>
       </div>
       <div className="mt-2">
         <NavLink
@@ -105,9 +110,6 @@ const Question = ({ question, refetch, handleTagClick }) => {
         </div>
         <div className="flex gap-2 sm:gap-4 items-center">
           <AuthorInfo author={author} />
-          {user && user.id === Number(author.id) && (
-            <ActionMenu onAction={handleQuestionAction} />
-          )}
         </div>
       </div>
       {tags.length > 0 && (
