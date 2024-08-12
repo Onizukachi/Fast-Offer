@@ -6,7 +6,7 @@ const ORDER_OPTIONS = [
   { key: "asc", label: "По убыванию" },
 ];
 
-const Orders = ({isLoading, sortBy, sortOrder, handleSortingChange}) => {
+const Sorting = ({isLoading, sortBy, sortOrder, handleSortingChange}) => {
   return (
     <>
       <Select
@@ -43,11 +43,11 @@ const Orders = ({isLoading, sortBy, sortOrder, handleSortingChange}) => {
   );
 };
 
-Orders.propTypes = {
+Sorting.propTypes = {
   isLoading: PropTypes.bool,
   sortBy: PropTypes.string,
   sortOrder: PropTypes.string,
   handleSortingChange: PropTypes.func,
 };
 
-export default Orders;
+export default Sorting;

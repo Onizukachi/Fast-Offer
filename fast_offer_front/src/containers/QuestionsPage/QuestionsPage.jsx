@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import { useState, useCallback, useRef, useEffect } from "react";
+import {useState, useCallback, useRef, useEffect, useContext} from "react";
 import { questionsQuery } from "./queries";
 import Question from "@components/Question";
 import { deserialize } from "deserialize-json-api";
@@ -11,11 +11,12 @@ import { debounce } from "lodash";
 import { Button } from "@nextui-org/react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { showToast } from "@utils/toast";
-import { UNPERMITTED } from "@constants/toastMessages";
+import {UNATHORIZED, UNPERMITTED} from "@constants/toastMessages";
 import { positionsQuery } from "@queries/positionsQuery";
 import { gradesQuery } from "@queries/gradesQuery";
 import FiltersBlock from "@components/Questions/FiltersBlock";
-import Orders from "@components/Questions/Orders/Orders.jsx";
+import Sorting from "@components/Questions/Sorting";
+import AuthContext from "@context/AuthContext";
 
 const LIMIT_PER_PAGE = 10;
 const SORT_FIELDS = ["created_at", "answers_count"];
@@ -40,6 +41,7 @@ const mergeQueryParams = (params) => ({
 });
 
 const QuestionsPage = () => {
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [questionsData, setQuestionsData] = useState([]);
@@ -218,6 +220,15 @@ const QuestionsPage = () => {
     { refetchInterval: false, refetchOnWindowFocus: false },
   );
 
+  const handleCreateQuestion = () => {
+    if (!user) {
+      showToast(UNATHORIZED, "warning");
+      return;
+    }
+
+    navigate("/questions/new", { replace: false })
+  }
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-center flex-wrap gap-6">
@@ -237,7 +248,7 @@ const QuestionsPage = () => {
           />
         </div>
         <Button
-          onClick={() => navigate("/questions/new", { replace: false })}
+          onClick={handleCreateQuestion}
           color="primary"
           size="lg"
           variant="shadow"
@@ -256,7 +267,7 @@ const QuestionsPage = () => {
             handlePositionsChange={handlePositionsChange}
             positions={positions}
           />
-          <Orders
+          <Sorting
             isLoading={isLoading}
             sortBy={filters.sortBy}
             sortOrder={filters.sortOrder}
