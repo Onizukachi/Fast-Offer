@@ -24,10 +24,10 @@ services:
     ports:
       - "3001:3001"
 
-#  sidekiq:
-#    <<: *backend
-#    command: bundle exec sidekiq
-#    entrypoint: []
+  sidekiq:
+    <<: *backend
+    command: bundle exec sidekiq
+    entrypoint: []
 
   frontend:
     build:
