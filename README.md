@@ -42,9 +42,7 @@ cd Fast-Offer
 cp .env.example .env
 ```
 
-
-#### По дефолту, api rails будет запущен в контейнере локально, и доступен по порту 3001. Вы можете это поменять, установив значение VITE_API_BASE_URL в .env
-
+By default, the Rails API will run in a local container and be accessible on port 3001. You can change this by setting the VITE_API_BASE_URL value in .env
 
 #### Build everything:
 
