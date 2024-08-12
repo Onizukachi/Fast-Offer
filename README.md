@@ -47,7 +47,7 @@ By default, the Rails API will run in a local container and be accessible on por
 #### Build everything:
 
 ```sh
-docker compose up --build
+docker compose -f ./docker-compose.dev.yml up --build
 ```
 
 #### Go to http://localhost:3000/:
