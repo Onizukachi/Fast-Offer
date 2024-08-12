@@ -50,6 +50,6 @@ By default, the Rails API will run in a local container and be accessible on por
 docker compose up --build
 ```
 
-#### Откройте сайт по урлу http://localhost:3000/:
+#### Go to http://localhost:3000/:
 
-####  Для продакшен, вам понадобится передать RAILS_MASTER_KEY в .env
+For production you will need to pass RAILS_MASTER_KEY to .env.
