@@ -24,19 +24,23 @@ function App() {
 
           <div className={styles.main}>
             <Routes>
-              {routesConfig.map((route, index) => (
-                <Route
-                  key={index}
-                  path={route.path}
-                  element={
-                    route.private ? (
-                      <PrivateRoute>{route.element}</PrivateRoute>
-                    ) : (
-                      <route.element />
-                    )
-                  }
-                />
-              ))}
+              {routesConfig.map((route, index) => {
+                if (route.private) {
+                  return (
+                    <Route key={index} element={<PrivateRoute />}>
+                      <Route path={route.path} element={<route.element />} />
+                    </Route>
+                  );
+                } else {
+                  return (
+                    <Route
+                      key={index}
+                      path={route.path}
+                      element={<route.element />}
+                    />
+                  );
+                }
+              })}
             </Routes>
           </div>
 
