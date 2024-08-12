@@ -27,12 +27,12 @@
 
 ## Running this app
 
-You'll need to have [Docker installed](https://docs.docker.com/get-docker/).
+You'll need to have [Docker installed](https://docs.docker.com/get-docker/)
 
 #### Clone this repo anywhere you want and move into the directory:
 
 ```sh
-git clone [https://github.com/nickjj/docker-rails-example hellorails](https://github.com/Onizukachi/Fast-Offer.git)
+git clone git@github.com:Onizukachi/Fast-Offer.git
 cd Fast-Offer
 ```
 
@@ -42,8 +42,14 @@ cd Fast-Offer
 cp .env.example .env
 ```
 
+By default, the Rails API will run in a local container and be accessible on port 3001. You can change this by setting the VITE_API_BASE_URL value in .env
+
 #### Build everything:
 
 ```sh
-docker compose up --build
+docker compose -f ./docker-compose.dev.yml up --build
 ```
+
+#### Go to http://localhost:3000/:
+
+For production you will need to pass RAILS_MASTER_KEY to .env.
