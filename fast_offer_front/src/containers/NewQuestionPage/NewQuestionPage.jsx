@@ -122,7 +122,7 @@ const NewQuestionPage = () => {
 
   return (
     <div className="flex flex-col">
-      <h1 className="text-3xl text-center mb-6">Задать вопрос</h1>
+      <h1 className="text-3xl text-center mb-6">Создать вопрос</h1>
       <div className="flex flex-col gap-6">
         {questionErrors.body.length > 0 && (
           <div className="mt-4 text-danger">

@@ -48,11 +48,18 @@ const QuestionsPage = () => {
   const [filters, setFilters] = useState(mergeQueryParams(searchParams));
   const hasMoreRef = useRef(false);
   const cursorRef = useRef(null);
+  const searchInputRef = useRef(null);
+  const searchWasFocusRef = useRef(false)
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
     setFilters(mergeQueryParams(searchParams));
   }, [searchParams]);
+
+
+  useEffect(() => {
+    if(searchWasFocusRef.current === true) searchInputRef.current?.focus()
+  }, [questionsData]);
 
   const toggleFilters = () => setShowFilters(!showFilters);
 
@@ -218,8 +225,10 @@ const QuestionsPage = () => {
         <div className="max-w-2xl w-full">
           <Input
             isDisabled={isLoading}
+            ref={searchInputRef}
             type="search"
             size="lg"
+            onFocus={() => searchWasFocusRef.current = true}
             onValueChange={handleSearch}
             placeholder="Поиск по вопросам"
             startContent={
@@ -233,7 +242,7 @@ const QuestionsPage = () => {
           size="lg"
           variant="shadow"
         >
-          Задать вопрос
+          Создать вопрос
         </Button>
       </div>
       {showFilters && (

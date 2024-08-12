@@ -7,7 +7,7 @@ class User < ApplicationRecord
 
   enum role: { basic: 0, moderator: 1, admin: 1 }, _suffix: :role
 
-  validates :username, presence: true, length: { minimum: 3 }, uniqueness: true
+  validates :username, presence: true, length: { minimum: 2 }, uniqueness: true
   validates :password, confirmation: true
   validates :password_confirmation, presence: true
 
@@ -19,6 +19,10 @@ class User < ApplicationRecord
   has_many :favorite_questions, through: :favorites, source: :question
 
   before_save :set_gravatar_hash, if: :email_changed?
+
+  def self.ai
+    find_by(username: 'AI')
+  end
 
   def nickname
     username || email.split('@').first
