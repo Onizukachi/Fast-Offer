@@ -1,6 +1,6 @@
-# Подготовься к собесу и получи крутой оффер
+# Prepare for an interview and get a great offer
 
-Здесь вы найдете базу вопросов по всем известным IT языкам, а так статистику по вакансиям, кампаниям и прочему.
+Here you will find a database of questions on all known IT languages, statistics on vacancies, employers, campaigns and more.
 ![image](https://github.com/user-attachments/assets/aa339854-bcd7-41cc-84aa-10a6f8ec431b)
 
 ## Tech stack
