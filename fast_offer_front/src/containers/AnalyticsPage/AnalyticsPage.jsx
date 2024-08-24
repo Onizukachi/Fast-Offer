@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import {useState, useMemo, useCallback} from "react";
 import { useQuery } from "react-query";
 import { analyticsQuery } from "./queries";
 import {
@@ -10,21 +10,32 @@ import {
   TableRow,
   TableCell,
   Pagination,
-  getKeyValue,
+  getKeyValue, Select, SelectItem,
 } from "@nextui-org/react";
 import { LineChart, lineElementClasses } from '@mui/x-charts/LineChart';
+import { positionsQuery } from "@queries/positionsQuery";
+import { deserialize } from "deserialize-json-api";
+import {useSearchParams} from "react-router-dom";
+import PositionSelector from "@components/Analytics/PositionSelector";
 
 const ROWS_PER_PAGE = 5
 
 const AnalyticsPage = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [positions, setPositions] = useState([])
   const [skills, setSkills] = useState([]);
   const [employers, setEmployers] = useState([]);
   const [chartData, setChartData] = useState({});
   const [skillsPage, setSkillsPage] = useState(1);
   const [employersPage, setEmployersPage] = useState(1);
-
+  const selectedPositionId = searchParams.get("position_id") || null;
   const skillsPages = Math.ceil(skills.length / ROWS_PER_PAGE);
   const employersPages = Math.ceil(employers.length / ROWS_PER_PAGE);
+
+  const resetPages = () => {
+    setSkillsPage(1);
+    setEmployersPage(1);
+  }
 
   const skillsPagination = useMemo(() => {
     const start = (skillsPage - 1) * ROWS_PER_PAGE;
@@ -41,25 +52,58 @@ const AnalyticsPage = () => {
   }, [employersPage, employers]);
 
   const { isSuccess, isLoading } = useQuery(
-    `analytics`,
+    [{selectedPositionId: selectedPositionId}],
     () =>
-      analyticsQuery()
+      analyticsQuery(selectedPositionId)
         .then((data) => {
+          resetPages();
           setEmployers(data.employers);
           setSkills(
             data.skills.map(([key, value]) => ({ skill: key, count: value })),
           );
-          setChartData(data.chart_data)
+          setChartData(data.chart_data);
         })
         .catch((error) => {
+          resetPages();
           console.log(error);
         }),
+    { refetchInterval: false, refetchOnWindowFocus: false },
+  );
+
+  const handlePositionChange = useCallback(
+    (positionId) => {
+      setSearchParams(
+        (prev) => {
+          prev.set(
+            "position_id", positionId);
+
+          return prev;
+        },
+        { replace: true },
+      );
+    },
+    [],
+  );
+
+  useQuery(
+    `positions`,
+    () =>
+      positionsQuery(
+      ).then((data) => {
+        const parsedData = deserialize(data).data
+        setPositions(parsedData)
+      }).catch((error) => {
+        console.log(error)
+      }),
     { refetchInterval: false, refetchOnWindowFocus: false },
   );
 
   return (
     <div className="flex flex-wrap gap-10 justify-center">
       {isLoading && <Spinner size="lg" color="primary" />}
+
+      <PositionSelector positions={positions} selectedId={selectedPositionId} handleChange={handlePositionChange} />
+
       {isSuccess && (
         <>
           <Table aria-label="skills table"

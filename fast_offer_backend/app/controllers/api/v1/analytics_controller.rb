@@ -6,9 +6,10 @@ module Api
       before_action :authenticate_user!
 
       def index
-        skills = Vacancy.skills_rated(params[:position_id] || 77)
-        employers = Employer.for_position(params[:position_id] || 77)
-        chart_data = VacancyManager::CountByMonth.call(params[:position_id] || 77)
+        position_id = params[:position_id] || Position.find_by(title: 'Ruby on Rails').id
+        skills = Vacancy.skills_rated(position_id)
+        employers = Employer.for_position(position_id)
+        chart_data = VacancyManager::CountByMonth.call(position_id)
 
         render json: { skills:, employers:, chart_data: }, status: :ok
       end

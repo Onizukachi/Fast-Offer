@@ -23,14 +23,15 @@ const Header = () => {
   const menuItems = ["Вопросы", "Собесы", "Избранное"];
   const { user } = useContext(AuthContext);
 
-  const makeQuestionsPageLink = () => {
-    if (!storedPositionId) return `/questions`;
+  const addPositionParam = (baseUrl, paramKey) => {
+    if (!storedPositionId) return baseUrl;
 
     const queryParams = queryString.stringify({
-      position_ids: storedPositionId,
+      [paramKey]: storedPositionId,
     });
-    return `/questions?${queryParams}`;
+    return `${baseUrl}?${queryParams}`;
   };
+
 
   return (
     <Navbar
@@ -85,7 +86,7 @@ const Header = () => {
         <NavbarItem isActive={currLocation === "questions"}>
           <Link
             color={currLocation === "questions" ? "primary" : "foreground"}
-            href={makeQuestionsPageLink()}
+            href={addPositionParam('/questions', 'positions_ids')}
           >
             Вопросы
           </Link>
@@ -93,7 +94,7 @@ const Header = () => {
         <NavbarItem isActive={currLocation === "analytics"}>
           <Link
             color={currLocation === "analytics" ? "primary" : "foreground"}
-            href="/analytics"
+            href={addPositionParam('/analytics', 'position_id')}
           >
             Аналитика
           </Link>
