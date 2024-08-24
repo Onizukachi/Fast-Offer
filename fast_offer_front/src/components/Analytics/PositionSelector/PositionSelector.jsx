@@ -16,9 +16,26 @@ const PositionSelector = memo(function PositionSelector({
       className="max-w-56 self-center"
       disableSelectorIconRotation
       onChange={(e) => handleChange(e.target.value)}
+      startContent={
+        selectedId &&
+        positions.length > 0 && (
+          <img
+            alt="Argentina"
+            className="w-6 h-6"
+            src={positions.find((el) => el.id === Number(selectedId)).image_url}
+          />
+        )
+      }
     >
       {positions.map((position) => (
-        <SelectItem key={position.id}>{position.title}</SelectItem>
+        <SelectItem
+          startContent={
+            <img alt="Argentina" className="w-6 h-6" src={position.image_url} />
+          }
+          key={position.id}
+        >
+          {position.title}
+        </SelectItem>
       ))}
     </Select>
   );

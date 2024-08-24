@@ -109,90 +109,95 @@ const AnalyticsPage = () => {
       {isLoading && <Spinner size="lg" color="primary" />}
       {isSuccess && (
         <>
-          <Table
-            aria-label="skills table"
-            bottomContent={
-              <div className="flex w-full justify-center">
-                <Pagination
-                  isCompact
-                  showControls
-                  showShadow
-                  color="secondary"
-                  page={skillsPage}
-                  total={skillsPages}
-                  onChange={(page) => setSkillsPage(page)}
-                />
-              </div>
-            }
-            classNames={{
-              base: "max-w-fit",
-            }}
-          >
-            <TableHeader>
-              <TableColumn key="skill">Навык</TableColumn>
-              <TableColumn key="count">Упоминаний</TableColumn>
-            </TableHeader>
-            <TableBody items={skillsPagination}>
-              {(skill) => (
-                <TableRow key={skill.skill}>
-                  {(columnKey) => (
-                    <TableCell>{getKeyValue(skill, columnKey)}</TableCell>
-                  )}
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-
-          <Table
-            aria-label="employers table"
-            bottomContent={
-              <div className="flex w-full justify-center">
-                <Pagination
-                  isCompact
-                  showControls
-                  showShadow
-                  color="secondary"
-                  page={employersPage}
-                  total={employersPages}
-                  onChange={(page) => setEmployersPage(page)}
-                />
-              </div>
-            }
-            classNames={{
-              base: "max-w-fit",
-            }}
-          >
-            <TableHeader>
-              <TableColumn key="name">Работодатель</TableColumn>
-            </TableHeader>
-            <TableBody items={employersPagination}>
-              {(employer) => (
-                <TableRow key={employer.name}>
-                  {(columnKey) => (
-                    <TableCell>{getKeyValue(employer, columnKey)}</TableCell>
-                  )}
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-          <LineChart
-            width={isSmallScreen ? 400 : 800}
-            height={300}
-            series={[
-              {
-                data: Object.values(chartData),
-                label: "Количество вакансий",
-                area: true,
-                showMark: false,
-              },
-            ]}
-            xAxis={[{ scaleType: "point", data: Object.keys(chartData) }]}
-            sx={{
-              [`& .${lineElementClasses.root}`]: {
-                display: "none",
-              },
-            }}
-          />
+          { skills.length > 0 && (
+            <Table
+              aria-label="skills table"
+              bottomContent={
+                <div className="flex w-full justify-center">
+                  <Pagination
+                    isCompact
+                    showControls
+                    showShadow
+                    color="secondary"
+                    page={skillsPage}
+                    total={skillsPages}
+                    onChange={(page) => setSkillsPage(page)}
+                  />
+                </div>
+              }
+              classNames={{
+                base: "max-w-fit",
+              }}
+            >
+              <TableHeader>
+                <TableColumn key="skill">Навык</TableColumn>
+                <TableColumn key="count">Упоминаний</TableColumn>
+              </TableHeader>
+              <TableBody items={skillsPagination}>
+                {(skill) => (
+                  <TableRow key={skill.skill}>
+                    {(columnKey) => (
+                      <TableCell>{getKeyValue(skill, columnKey)}</TableCell>
+                    )}
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          )}
+          {  employers.length > 0 && (
+            <Table
+              aria-label="employers table"
+              bottomContent={
+                <div className="flex w-full justify-center">
+                  <Pagination
+                    isCompact
+                    showControls
+                    showShadow
+                    color="secondary"
+                    page={employersPage}
+                    total={employersPages}
+                    onChange={(page) => setEmployersPage(page)}
+                  />
+                </div>
+              }
+              classNames={{
+                base: "max-w-fit",
+              }}
+            >
+              <TableHeader>
+                <TableColumn key="name">Работодатель</TableColumn>
+              </TableHeader>
+              <TableBody items={employersPagination}>
+                {(employer) => (
+                  <TableRow key={employer.name}>
+                    {(columnKey) => (
+                      <TableCell>{getKeyValue(employer, columnKey)}</TableCell>
+                    )}
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          )}
+          { Object.keys(chartData).length > 0 && (
+            <LineChart
+              width={isSmallScreen ? 400 : 800}
+              height={300}
+              series={[
+                {
+                  data: Object.values(chartData),
+                  label: "Количество вакансий",
+                  area: true,
+                  showMark: false,
+                },
+              ]}
+              xAxis={[{ scaleType: "point", data: Object.keys(chartData) }]}
+              sx={{
+                [`& .${lineElementClasses.root}`]: {
+                  display: "none",
+                },
+              }}
+            />
+          )}
         </>
       )}
     </div>

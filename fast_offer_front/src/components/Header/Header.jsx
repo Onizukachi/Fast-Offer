@@ -86,7 +86,7 @@ const Header = () => {
         <NavbarItem isActive={currLocation === "questions"}>
           <Link
             color={currLocation === "questions" ? "primary" : "foreground"}
-            href={addPositionParam('/questions', 'positions_ids')}
+            href={addPositionParam('/questions', 'position_ids')}
           >
             Вопросы
           </Link>
