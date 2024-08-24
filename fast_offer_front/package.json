@@ -10,6 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/material": "^5.16.7",
+    "@mui/styled-engine-sc": "^6.0.0-alpha.18",
+    "@mui/x-charts": "^7.14.0",
     "@nextui-org/input": "^2.2.2",
     "@nextui-org/modal": "^2.0.36",
     "@nextui-org/navbar": "^2.0.33",
@@ -37,7 +42,8 @@
     "react-tag-autocomplete": "^7.3.0",
     "react-tag-input": "^6.10.3",
     "react-toastify": "^10.0.5",
-    "redux": "^5.0.1"
+    "redux": "^5.0.1",
+    "styled-components": "^6.1.12"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
