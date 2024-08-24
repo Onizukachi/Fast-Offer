@@ -5,6 +5,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+    scrollbar-gutter: stable;
+}
+
 .app {
     padding: 40px;
     text-align: center;
