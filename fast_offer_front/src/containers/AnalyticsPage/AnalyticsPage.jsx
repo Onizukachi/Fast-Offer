@@ -1,4 +1,4 @@
-import {useState, useMemo, useCallback} from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useQuery } from "react-query";
 import { analyticsQuery } from "./queries";
 import {
@@ -10,19 +10,20 @@ import {
   TableRow,
   TableCell,
   Pagination,
-  getKeyValue, Select, SelectItem,
+  getKeyValue,
 } from "@nextui-org/react";
-import { LineChart, lineElementClasses } from '@mui/x-charts/LineChart';
+import { LineChart, lineElementClasses } from "@mui/x-charts/LineChart";
+import { useMediaQuery } from '@mui/material';
 import { positionsQuery } from "@queries/positionsQuery";
 import { deserialize } from "deserialize-json-api";
-import {useSearchParams} from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import PositionSelector from "@components/Analytics/PositionSelector";
 
-const ROWS_PER_PAGE = 5
+const ROWS_PER_PAGE = 5;
 
 const AnalyticsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [positions, setPositions] = useState([])
+  const [positions, setPositions] = useState([]);
   const [skills, setSkills] = useState([]);
   const [employers, setEmployers] = useState([]);
   const [chartData, setChartData] = useState({});
@@ -35,7 +36,7 @@ const AnalyticsPage = () => {
   const resetPages = () => {
     setSkillsPage(1);
     setEmployersPage(1);
-  }
+  };
 
   const skillsPagination = useMemo(() => {
     const start = (skillsPage - 1) * ROWS_PER_PAGE;
@@ -52,7 +53,7 @@ const AnalyticsPage = () => {
   }, [employersPage, employers]);
 
   const { isSuccess, isLoading } = useQuery(
-    [{selectedPositionId: selectedPositionId}],
+    [{ selectedPositionId: selectedPositionId }],
     () =>
       analyticsQuery(selectedPositionId)
         .then((data) => {
@@ -70,43 +71,46 @@ const AnalyticsPage = () => {
     { refetchInterval: false, refetchOnWindowFocus: false },
   );
 
-  const handlePositionChange = useCallback(
-    (positionId) => {
-      setSearchParams(
-        (prev) => {
-          prev.set(
-            "position_id", positionId);
+  const handlePositionChange = useCallback((positionId) => {
+    setSearchParams(
+      (prev) => {
+        prev.set("position_id", positionId);
 
-          return prev;
-        },
-        { replace: true },
-      );
-    },
-    [],
-  );
+        return prev;
+      },
+      { replace: true },
+    );
+  }, [setSearchParams]);
 
   useQuery(
     `positions`,
     () =>
-      positionsQuery(
-      ).then((data) => {
-        const parsedData = deserialize(data).data
-        setPositions(parsedData)
-      }).catch((error) => {
-        console.log(error)
-      }),
+      positionsQuery()
+        .then((data) => {
+          const parsedData = deserialize(data).data;
+          setPositions(parsedData);
+        })
+        .catch((error) => {
+          console.log(error);
+        }),
     { refetchInterval: false, refetchOnWindowFocus: false },
   );
 
+  const isSmallScreen = useMediaQuery('(max-width:640px)');
+
   return (
+    <div className='flex flex-col gap-10'>
+    <PositionSelector
+      positions={positions}
+      selectedId={selectedPositionId}
+      handleChange={handlePositionChange}
+    />
     <div className="flex flex-wrap gap-10 justify-center">
       {isLoading && <Spinner size="lg" color="primary" />}
-
-      <PositionSelector positions={positions} selectedId={selectedPositionId} handleChange={handlePositionChange} />
-
       {isSuccess && (
         <>
-          <Table aria-label="skills table"
+          <Table
+            aria-label="skills table"
             bottomContent={
               <div className="flex w-full justify-center">
                 <Pagination
@@ -139,7 +143,8 @@ const AnalyticsPage = () => {
             </TableBody>
           </Table>
 
-          <Table aria-label="employers table"
+          <Table
+            aria-label="employers table"
             bottomContent={
               <div className="flex w-full justify-center">
                 <Pagination
@@ -171,18 +176,26 @@ const AnalyticsPage = () => {
             </TableBody>
           </Table>
           <LineChart
-            width={800}
+            width={isSmallScreen ? 400 : 800}
             height={300}
-            series={[{ data: Object.values(chartData), label: 'Количество вакансий', area: true, showMark: false }]}
-            xAxis={[{ scaleType: 'point', data: Object.keys(chartData) }]}
+            series={[
+              {
+                data: Object.values(chartData),
+                label: "Количество вакансий",
+                area: true,
+                showMark: false,
+              },
+            ]}
+            xAxis={[{ scaleType: "point", data: Object.keys(chartData) }]}
             sx={{
               [`& .${lineElementClasses.root}`]: {
-                display: 'none',
+                display: "none",
               },
             }}
           />
         </>
       )}
+    </div>
     </div>
   );
 };
