@@ -15,7 +15,7 @@ gem 'redis'
 
 gem 'sidekiq'
 
-gem 'sidekiq-scheduler'
+gem 'sidekiq-cron'
 
 gem 'devise-jwt'
 

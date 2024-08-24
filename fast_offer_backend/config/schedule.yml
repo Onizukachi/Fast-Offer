@@ -1,0 +1,5 @@
+update_analytics:
+  cron: "0 */6 * * *"
+  class: "UpdateAnalyticsJob"
+  queue: default
+  enabled: true

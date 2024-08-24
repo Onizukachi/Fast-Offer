@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_05_075914) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_21_143428) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -67,6 +67,23 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_05_075914) do
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
+  create_table "companies", force: :cascade do |t|
+    t.string "name"
+    t.string "address"
+    t.string "email"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_companies_on_name", unique: true
+  end
+
+  create_table "employers", force: :cascade do |t|
+    t.string "name"
+    t.string "url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_employers_on_name", unique: true
+  end
+
   create_table "favorites", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "question_id", null: false
@@ -100,6 +117,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_05_075914) do
     t.index ["user_id"], name: "index_likes_on_user_id"
   end
 
+  create_table "position_companies", force: :cascade do |t|
+    t.bigint "company_id", null: false
+    t.bigint "position_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_position_companies_on_company_id"
+    t.index ["position_id", "company_id"], name: "index_position_companies_on_position_id_and_company_id", unique: true
+    t.index ["position_id"], name: "index_position_companies_on_position_id"
+  end
+
   create_table "position_questions", force: :cascade do |t|
     t.bigint "position_id", null: false
     t.bigint "question_id", null: false
@@ -130,6 +157,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_05_075914) do
     t.integer "answers_count", default: 0
     t.index ["it_grades_id"], name: "index_questions_on_it_grades_id"
     t.index ["user_id"], name: "index_questions_on_user_id"
+  end
+
+  create_table "skills", force: :cascade do |t|
+    t.string "title"
+    t.bigint "position_id", null: false
+    t.integer "frequency", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["position_id"], name: "index_skills_on_position_id"
   end
 
   create_table "taggings", force: :cascade do |t|
@@ -181,6 +217,26 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_05_075914) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  create_table "vacancies", force: :cascade do |t|
+    t.bigint "position_id", null: false
+    t.integer "hh_id"
+    t.string "name"
+    t.string "email"
+    t.string "location"
+    t.integer "salary_from"
+    t.integer "salary_to"
+    t.string "salary_currency"
+    t.datetime "published_at"
+    t.string "skills", default: [], array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "employer_id", null: false
+    t.index ["employer_id"], name: "index_vacancies_on_employer_id"
+    t.index ["hh_id"], name: "index_vacancies_on_hh_id", unique: true
+    t.index ["position_id"], name: "index_vacancies_on_position_id"
+    t.index ["skills"], name: "index_vacancies_on_skills", using: :gin
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "answers", "questions"
@@ -189,9 +245,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_05_075914) do
   add_foreign_key "favorites", "questions"
   add_foreign_key "favorites", "users"
   add_foreign_key "likes", "users"
+  add_foreign_key "position_companies", "companies"
+  add_foreign_key "position_companies", "positions"
   add_foreign_key "position_questions", "positions"
   add_foreign_key "position_questions", "questions"
   add_foreign_key "questions", "it_grades", column: "it_grades_id"
   add_foreign_key "questions", "users"
+  add_foreign_key "skills", "positions"
   add_foreign_key "taggings", "tags"
+  add_foreign_key "vacancies", "employers"
+  add_foreign_key "vacancies", "positions"
 end

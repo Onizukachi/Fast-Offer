@@ -90,6 +90,14 @@ const Header = () => {
             Вопросы
           </Link>
         </NavbarItem>
+        <NavbarItem isActive={currLocation === "analytics"}>
+          <Link
+            color={currLocation === "analytics" ? "primary" : "foreground"}
+            href="/analytics"
+          >
+            Аналитика
+          </Link>
+        </NavbarItem>
         <NavbarItem isActive={currLocation === "interviews"}>
           <Link
             color={currLocation === "interviews" ? "primary" : "foreground"}

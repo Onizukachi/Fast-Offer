@@ -1,9 +1,12 @@
 require 'sidekiq/web'
+require 'sidekiq/cron/web'
+
+# Configure Sidekiq-specific session middleware
+Sidekiq::Web.use ActionDispatch::Cookies
+Sidekiq::Web.use ActionDispatch::Session::CookieStore, key: '_interslice_session'
 
 Rails.application.routes.draw do
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
-  get "up" => "rails/health#show", as: :rails_health_check
+  get 'up' => 'rails/health#show', as: :rails_health_check
 
   mount Sidekiq::Web => '/sidekiq'
 
@@ -26,6 +29,7 @@ Rails.application.routes.draw do
         end
       end
       resources :positions, except: %i[show]
+      resources :analytics, only: %i[index]
       resources :likes, only: [:create] do
         collection do
           delete 'unlike', to: 'likes#unlike'

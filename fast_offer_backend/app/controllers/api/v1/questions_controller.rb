@@ -4,6 +4,7 @@ module Api
   module V1
     class QuestionsController < ApplicationController
       include CursorMetaParamsHandler
+
       before_action :authenticate_user!, except: %i[index show]
       before_action :set_question, except: %i[index create]
       before_action :authorize_question!

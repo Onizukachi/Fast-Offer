@@ -3,6 +3,7 @@ x-backend:
   build:
     context: ./fast_offer_backend
     dockerfile: Dockerfile
+  user: "${UID:-1000}:${GID:-1000}"
   depends_on:
     postgres:
       condition: "service_started"
