@@ -7,22 +7,34 @@ const PositionSelector = memo(function PositionSelector({
   handleChange,
   selectedId,
 }) {
+  const findRuby = () => {
+    const ruby = positions.find((el) => el.id === 77);
+    if (!ruby) return
+
+    return String(ruby.id)
+  }
+
+  const defaultKey = () => {
+    if (selectedId) return selectedId;
+
+    return findRuby(positions);
+  }
+
   return (
     <Select
       label="Язык программирования"
-      selectedKeys={positions.length > 0 ? [selectedId] : []}
+      selectedKeys={positions.length > 0 ? [defaultKey()] : []}
       labelPlacement="outside"
       placeholder="Выберите язык программирования"
       className="max-w-56 self-center"
       disableSelectorIconRotation
       onChange={(e) => handleChange(e.target.value)}
       startContent={
-        selectedId &&
         positions.length > 0 && (
           <img
             alt="Argentina"
             className="w-6 h-6"
-            src={positions.find((el) => el.id === Number(selectedId)).image_url}
+            src={positions.find((el) => el.id === Number(defaultKey())).image_url}
           />
         )
       }
