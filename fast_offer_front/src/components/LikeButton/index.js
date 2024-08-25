@@ -1,1 +1,1 @@
-export { default } from './LikeButton.jsx';
+export { default } from './LikeButton';

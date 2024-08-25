@@ -5,8 +5,7 @@ import Question from "@components/Question";
 import { deserialize } from "deserialize-json-api";
 import InfiniteScroll from "react-infinite-scroll-component";
 import BeatLoader from "react-spinners/BeatLoader";
-import { Input, Switch } from "@nextui-org/react";
-import { IoSearchOutline } from "react-icons/io5";
+import { Switch } from "@nextui-org/react";
 import { debounce } from "lodash";
 import { Button } from "@nextui-org/react";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -17,6 +16,7 @@ import { gradesQuery } from "@queries/gradesQuery";
 import FiltersBlock from "@components/Questions/FiltersBlock";
 import Sorting from "@components/Questions/Sorting";
 import AuthContext from "@context/AuthContext";
+import SearchInput from "@components/Questions/SearchInput";
 
 const LIMIT_PER_PAGE = 10;
 const SORT_FIELDS = ["created_at", "answers_count"];
@@ -87,7 +87,7 @@ const QuestionsPage = () => {
         { replace: true },
       );
     }, 500), // Debounce for 500 milliseconds
-    [searchParams],
+    [],
   );
 
   const handleGradeChange = useCallback(
@@ -229,22 +229,19 @@ const QuestionsPage = () => {
     navigate("/questions/new", { replace: false })
   }
 
+  const handleSearchFocus = useCallback(() => {
+    searchWasFocusRef.current = true;
+  }, []);
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-center flex-wrap gap-6">
         <Switch onChange={toggleFilters}>Фильтры</Switch>
         <div className="max-w-2xl w-full">
-          <Input
-            isDisabled={isLoading}
-            ref={searchInputRef}
-            type="search"
-            size="lg"
-            onFocus={() => searchWasFocusRef.current = true}
-            onValueChange={handleSearch}
-            placeholder="Поиск по вопросам"
-            startContent={
-              <IoSearchOutline className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-            }
+          <SearchInput
+            inputRef={searchInputRef}
+            onFocus={handleSearchFocus}
+            onChange={handleSearch}
           />
         </div>
         <Button
