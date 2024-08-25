@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import {useState, useCallback, useRef, useEffect, useContext} from "react";
+import { useState, useCallback, useRef, useEffect, useContext } from "react";
 import { questionsQuery } from "./queries";
 import Question from "@components/Question";
 import { deserialize } from "deserialize-json-api";
@@ -10,13 +10,14 @@ import { debounce } from "lodash";
 import { Button } from "@nextui-org/react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { showToast } from "@utils/toast";
-import {UNATHORIZED, UNPERMITTED} from "@constants/toastMessages";
+import { UNATHORIZED, UNPERMITTED } from "@constants/toastMessages";
 import { positionsQuery } from "@queries/positionsQuery";
 import { gradesQuery } from "@queries/gradesQuery";
-import FiltersBlock from "@components/Questions/FiltersBlock";
 import Sorting from "@components/Questions/Sorting";
 import AuthContext from "@context/AuthContext";
 import SearchInput from "@components/Questions/SearchInput";
+import DifficultySelector from "@components/Questions/DifficultySelector/index.js";
+import PositionSelector from "@components/Questions/PositionSelector/index.js";
 
 const LIMIT_PER_PAGE = 10;
 const SORT_FIELDS = ["created_at", "answers_count"];
@@ -25,6 +26,9 @@ const ORDER_OPTIONS = [
   { key: "asc", label: "По убыванию" },
 ];
 
+// Здесь есть проблема с лишними рендерами. Так как при изменении любого фильтра, обновляется весь filter из query params
+// и соответственно, значения внутри обьекта этого, если они не число например, буду создаваться заново, массивы и тд
+// и триггерить перерндер дочерних компонентов, хотя содержимое осталось прежним
 const mergeQueryParams = (params) => ({
   searchTerm: params.get("q") || "",
   selectedGradeId: params.get("grade_id") || null,
@@ -51,16 +55,15 @@ const QuestionsPage = () => {
   const hasMoreRef = useRef(false);
   const cursorRef = useRef(null);
   const searchInputRef = useRef(null);
-  const searchWasFocusRef = useRef(false)
+  const searchWasFocusRef = useRef(false);
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
     setFilters(mergeQueryParams(searchParams));
   }, [searchParams]);
 
-
   useEffect(() => {
-    if(searchWasFocusRef.current === true) searchInputRef.current?.focus()
+    if (searchWasFocusRef.current === true) searchInputRef.current?.focus();
   }, [questionsData]);
 
   const toggleFilters = () => setShowFilters(!showFilters);
@@ -106,7 +109,7 @@ const QuestionsPage = () => {
         { replace: true },
       );
     },
-    [searchParams, filters.selectedGradeId],
+    [filters.selectedGradeId],
   );
 
   const handleTagClick = useCallback(
@@ -125,29 +128,26 @@ const QuestionsPage = () => {
         { replace: true },
       );
     },
-    [searchParams, filters.selectedTag],
+    [filters.selectedTag],
   );
 
-  const handlePositionsChange = useCallback(
-    (positionIds) => {
-      resetMeta();
-      setSearchParams(
-        (prev) => {
-          prev.set(
-            "position_ids",
-            Array.from(positionIds)
-              .map((el) => Number(el))
-              .filter((el) => el !== 0)
-              .join(","),
-          );
+  const handlePositionsChange = useCallback((positionIds) => {
+    resetMeta();
+    setSearchParams(
+      (prev) => {
+        prev.set(
+          "position_ids",
+          Array.from(positionIds)
+            .map((el) => Number(el))
+            .filter((el) => el !== 0)
+            .join(","),
+        );
 
-          return prev;
-        },
-        { replace: true },
-      );
-    },
-    [searchParams],
-  );
+        return prev;
+      },
+      { replace: true },
+    );
+  }, []);
 
   const handleSortingChange = useCallback(
     (field, direction) => {
@@ -170,7 +170,7 @@ const QuestionsPage = () => {
         { replace: true },
       );
     },
-    [searchParams, filters.sortBy, filters.sortOrder],
+    [filters.sortBy, filters.sortOrder],
   );
 
   const queryParams = {
@@ -184,7 +184,7 @@ const QuestionsPage = () => {
     tag: filters.selectedTag,
   };
 
-  const { isLoading, refetch } = useQuery(
+  const { refetch } = useQuery(
     [filters],
     () =>
       questionsQuery(queryParams)
@@ -226,8 +226,8 @@ const QuestionsPage = () => {
       return;
     }
 
-    navigate("/questions/new", { replace: false })
-  }
+    navigate("/questions/new", { replace: false });
+  };
 
   const handleSearchFocus = useCallback(() => {
     searchWasFocusRef.current = true;
@@ -255,17 +255,17 @@ const QuestionsPage = () => {
       </div>
       {showFilters && (
         <div className="flex flex-wrap gap-6 justify-center mt-3">
-          <FiltersBlock
-            isLoading={isLoading}
-            selectedGradeId={filters.selectedGradeId}
-            handleGradeChange={handleGradeChange}
+          <DifficultySelector
             grades={grades}
-            selectedPositionIds={filters.selectedPositionIds}
-            handlePositionsChange={handlePositionsChange}
+            selectedId={filters.selectedGradeId}
+            onChange={handleGradeChange}
+          />
+          <PositionSelector
             positions={positions}
+            selectedIds={filters.selectedPositionIds}
+            onChange={handlePositionsChange}
           />
           <Sorting
-            isLoading={isLoading}
             sortBy={filters.sortBy}
             sortOrder={filters.sortOrder}
             handleSortingChange={handleSortingChange}

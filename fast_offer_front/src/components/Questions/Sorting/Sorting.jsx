@@ -1,16 +1,16 @@
 import { Select, SelectItem } from "@nextui-org/react";
 import PropTypes from "prop-types";
+import {memo} from "react";
 
 const ORDER_OPTIONS = [
   { key: "desc", label: "По возрастанию" },
   { key: "asc", label: "По убыванию" },
 ];
 
-const Sorting = ({isLoading, sortBy, sortOrder, handleSortingChange}) => {
+const Sorting = memo(function Sorting ({ sortBy, sortOrder, handleSortingChange}) {
   return (
     <>
       <Select
-        isDisabled={isLoading}
         label="Сортировать по дате"
         defaultSelectedKeys={sortBy === "created_at" ? [sortOrder] : []}
         selectedKeys={sortBy === "created_at" ? [sortOrder] : []}
@@ -25,7 +25,6 @@ const Sorting = ({isLoading, sortBy, sortOrder, handleSortingChange}) => {
         ))}
       </Select>
       <Select
-        isDisabled={isLoading}
         label="Сортировать по популярности"
         selectedKeys={sortBy === "answers_count" ? [sortOrder] : []}
         defaultSelectedKeys={sortBy === "answers_count" ? [sortOrder] : []}
@@ -41,10 +40,9 @@ const Sorting = ({isLoading, sortBy, sortOrder, handleSortingChange}) => {
       </Select>
     </>
   );
-};
+});
 
 Sorting.propTypes = {
-  isLoading: PropTypes.bool,
   sortBy: PropTypes.string,
   sortOrder: PropTypes.string,
   handleSortingChange: PropTypes.func,
