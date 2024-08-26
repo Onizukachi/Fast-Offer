@@ -2,6 +2,7 @@
 
 Here you will find a database of questions on all known IT languages, statistics on vacancies, employers, campaigns and more.
 ![image](https://github.com/user-attachments/assets/aa339854-bcd7-41cc-84aa-10a6f8ec431b)
+![image](https://github.com/user-attachments/assets/9d5551a4-45c3-47a1-81d8-6316bf475534)
 
 ## Tech stack
 
