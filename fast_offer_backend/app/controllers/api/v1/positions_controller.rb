@@ -10,7 +10,8 @@ module Api
 
       # GET /api/v1/positions
       def index
-        render json: PositionSerializer.new(Position.all)
+        render json: PositionSerializer.new(Position.with_attached_image.includes(:analytic_log).all,
+                                            { include: [:analytic_log] })
       end
 
       # POST /api/v1/positions

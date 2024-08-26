@@ -80,6 +80,7 @@ module Analytics
       log = CronAnalyticsLog.find_or_initialize_by(position_id:)
 
       log.vacancies_processed = vacancies_processed
+      log.updated_at = Time.current
       log.save!
     end
 
