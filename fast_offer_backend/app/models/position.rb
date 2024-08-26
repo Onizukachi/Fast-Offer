@@ -2,6 +2,7 @@
 
 class Position < ApplicationRecord
   has_one_attached :image
+  has_one :analytic_log, class_name: 'CronAnalyticsLog'
   has_many :position_questions, dependent: :destroy
   has_many :questions, through: :position_questions
 
