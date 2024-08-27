@@ -5,6 +5,7 @@ class Vacancy < ApplicationRecord
   belongs_to :position
 
   validates :name, presence: true
+  validates :hh_id, uniqueness: { allow_blank: true }
 
   scope :hh, -> { where.not(hh_id: nil) }
 

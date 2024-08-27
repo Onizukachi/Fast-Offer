@@ -22,7 +22,7 @@ class Question < ApplicationRecord
   private
 
   def minimum_length
-    errors.add(:body, :too_short, count: 6) if strip_tags(body).length < 6
+    errors.add(:body, :too_short, count: 6) if !body || strip_tags(body).length < 6
   end
 
   def must_have_at_least_one_position

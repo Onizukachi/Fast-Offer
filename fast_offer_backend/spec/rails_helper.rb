@@ -1,8 +1,9 @@
 require 'spec_helper'
-ENV['RAILS_ENV'] ||= 'test'
+ENV['RAILS_ENV'] = 'test'
 require_relative '../config/environment'
+
 # Prevent database truncation if the environment is production
-abort("The Rails environment is running in production mode!") if Rails.env.production?
+abort('The Rails environment is running in production mode!') if Rails.env.production?
 require 'rspec/rails'
 require 'devise/jwt/test_helpers'
 
@@ -13,6 +14,7 @@ begin
 rescue ActiveRecord::PendingMigrationError => e
   abort e.to_s.strip
 end
+
 RSpec.configure do |config|
   config.fixture_paths = [
     Rails.root.join('spec/fixtures')
@@ -24,6 +26,7 @@ RSpec.configure do |config|
     DatabaseCleaner.clean_with(:truncation)
     DatabaseCleaner.strategy = :transaction
   end
+
   # start the transaction strategy as examples are run
   config.around(:each) do |example|
     DatabaseCleaner.cleaning do

@@ -16,6 +16,6 @@ class CreateVacancies < ActiveRecord::Migration[7.1]
     end
 
     add_index :vacancies, :skills, using: 'gin'
-    add_index :vacancies, :hh_id, unique: true
+    add_index :vacancies, :hh_id, unique: true, where: 'hh_id IS NOT NULL', name: 'unique_not_null_hh_id'
   end
 end

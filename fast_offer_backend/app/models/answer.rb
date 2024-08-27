@@ -11,12 +11,12 @@ class Answer < ApplicationRecord
 
   belongs_to :question, counter_cache: true
 
+  validates :body, uniqueness: { scope: :question_id }, presence: true
   validate :minimum_length
-  validates :body, uniqueness: true, presence: true
 
   private
 
   def minimum_length
-    errors.add(:body, :too_short, count: 6) if strip_tags(body).length < 6
+    errors.add(:body, :too_short, count: 6) if !body || strip_tags(body).length < 6
   end
 end

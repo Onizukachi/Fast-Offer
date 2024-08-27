@@ -5,5 +5,11 @@ FactoryBot.define do
     body { Faker::Lorem.question(word_count: 5) }
     author
     grade
+
+    trait :with_position do
+      after(:build) do |question|
+        question.positions << FactoryBot.build(:position)
+      end
+    end
   end
 end

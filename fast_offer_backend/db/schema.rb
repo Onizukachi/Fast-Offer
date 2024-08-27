@@ -212,7 +212,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_26_060254) do
     t.datetime "updated_at", null: false
     t.bigint "employer_id", null: false
     t.index ["employer_id"], name: "index_vacancies_on_employer_id"
-    t.index ["hh_id"], name: "index_vacancies_on_hh_id", unique: true
+    t.index ["hh_id"], name: "unique_not_null_hh_id", unique: true, where: "(hh_id IS NOT NULL)"
     t.index ["position_id"], name: "index_vacancies_on_position_id"
     t.index ["skills"], name: "index_vacancies_on_skills", using: :gin
   end
