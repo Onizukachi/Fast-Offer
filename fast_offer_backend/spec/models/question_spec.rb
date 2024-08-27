@@ -13,10 +13,15 @@ RSpec.describe Question, type: :model do
   end
 
   describe 'validations' do
-    subject { build(:question) }
+    subject { build(:question, :with_position) }
 
     it { should validate_presence_of(:body) }
     it { should validate_uniqueness_of(:body) }
-    it { should validate_length_of(:body).is_at_least(5) }
+    it { should validate_length_of(:body).is_at_least(6) }
+
+    it 'is not valid without at least one position' do
+      subject.positions = []
+      expect(subject).to_not be_valid
+    end
   end
 end

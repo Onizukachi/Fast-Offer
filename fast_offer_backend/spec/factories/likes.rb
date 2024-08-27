@@ -3,7 +3,6 @@
 FactoryBot.define do
   factory :like do
     user
-    for_question
 
     trait :for_question do
       association :likeable, factory: :question

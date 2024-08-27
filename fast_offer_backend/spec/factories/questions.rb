@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :question do
-    body { Faker::Lorem.question(word_count: 5) }
+    body { Faker::Lorem.question(word_count: 10) }
     author
     grade
 

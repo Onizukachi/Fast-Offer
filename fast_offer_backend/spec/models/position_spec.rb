@@ -5,6 +5,8 @@ require 'rails_helper'
 RSpec.describe Position, type: :model do
   describe 'associations' do
     it { should have_many(:questions) }
+    it { should have_one(:analytic_log) }
+    it { should have_one_attached(:image) }
   end
 
   describe 'validations' do

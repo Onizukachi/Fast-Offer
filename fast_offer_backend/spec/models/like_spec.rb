@@ -9,7 +9,10 @@ RSpec.describe Like, type: :model do
   end
 
   describe 'validations' do
-    subject { build(:like) }
+    let(:user) { create(:user) }
+    let(:likeable) { create(:question, :with_position) }
+
+    subject { build(:like, user:, likeable:) }
 
     it { should validate_uniqueness_of(:user_id).scoped_to(:likeable_id, :likeable_type) }
   end
